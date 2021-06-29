@@ -22,3 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('stations', StationController::class)
     // Don't include forms since where are using a react app
     ->except(['create', 'edit']);
+    
+// Need to manually add history route because it's not a default operation for resources
+Route::get('/stations/history/{id}', [StationController::class, 'history']);

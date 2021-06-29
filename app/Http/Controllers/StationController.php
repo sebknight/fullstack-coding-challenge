@@ -25,7 +25,7 @@ class StationController extends Controller
      */
     public function store(Request $request)
     {
-        abort(501);
+        return Station::create($request->all());
     }
 
     /**
@@ -36,7 +36,7 @@ class StationController extends Controller
      */
     public function show($id)
     {
-        return Station::find($id);
+        return Station::findOrFail($id);
     }
 
     /**
@@ -48,7 +48,21 @@ class StationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        abort(501);
+        $station = Station::findOrFail($id);
+
+        // $history = $station->replicate();
+        // $history->toArray();
+        // StationHistory::firstOrCreate($history);
+
+        $history = new StationHistory();
+        $history->station->name;
+        $history->station->latitude;
+        $history->station->longitude;
+        $history->save();
+
+        $station->update($request->all());
+
+        return 400;
     }
 
     /**
@@ -59,6 +73,17 @@ class StationController extends Controller
      */
     public function destroy($id)
     {
-        abort(501);
+        $station = Station::findOrFail($id);
+        $station->delete();
+
+        return 204;
+    }
+
+    public function history($id)
+    {
+        $station = Station::findOrFail($id);
+        $history = $station->stationHistories->toJson();
+
+        print_r($history);
     }
 }
